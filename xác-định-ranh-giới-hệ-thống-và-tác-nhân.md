@@ -61,8 +61,6 @@
 * Cập nhật tồn kho *(Xử lý sau khi hủy đơn thành công)*
 * Xử lý hoàn tiền *(Xử lý sau khi hủy đơn đã thanh toán)*
 
-## Sơ đồ Use Case tổng thể 
 
-<img width="733" height="682" alt="sodotongthe drawio" src="https://github.com/user-attachments/assets/553733d2-283b-43c6-a6ce-00efda4a59a7" />
 
 
