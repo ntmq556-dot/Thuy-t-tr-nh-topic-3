@@ -1,0 +1,62 @@
+                                       MÔ HÌNH HÓA CHỨC NĂNG VÀ ĐẶC TẢ USE CASE
+                                              THÀNH VIÊN 2 : ĐẶT HÀNG 
+1. Mô tả tổng quan (Brief Description)
+Use Case này cho phép Khách hàng chọn các sản phẩm từ giỏ hàng, nhập/xác nhận thông tin giao hàng, chọn phương thức thanh toán và hoàn tất việc tạo đơn hàng mới trên hệ thống.
+
+2. Thông tin Use Case (Use Case Metadata)
+Mã Use Case (ID): UC01
+Tên Use Case: Đặt hàng (Place Order)
+Actor chính: Khách hàng (Customer)
+Actor phụ (nếu có): Hệ thống thanh toán (Payment Gateway / Third-party)
+
+3. Tiền điều kiện & Hậu điều kiện (Preconditions & Postconditions)
+Tiền điều kiện (Preconditions):
+
+  1/Khách hàng đã đăng nhập vào tài khoản hệ thống (hoặc hệ thống cho phép đặt hàng với tư cách khách vãng lai).
+
+  2/Giỏ hàng của Khách hàng có ít nhất 01 sản phẩm hợp lệ.
+
+  3/Hậu điều kiện (Postconditions):
+
+  4/Đơn hàng mới được tạo thành công trên hệ thống với trạng thái ban đầu (ví dụ: Chờ xác nhận / Chờ thanh toán).
+
+  5/Số lượng tồn kho của các sản phẩm tương ứng được cập nhật/trừ bớt.
+
+  6/Giỏ hàng hiện tại của Khách hàng được xóa sạch các mục đã đặt.
+
+  7/Thông báo/Email xác nhận đơn hàng được gửi đến Khách hàng.
+
+4. Luồng sự kiện chính (Basic Flow / Main Success Scenario)
+Khách hàng truy cập màn hình Giỏ hàng và chọn "Tiến hành Đặt hàng".
+Hệ thống kiểm tra tồn kho và trạng thái khả dụng của các sản phẩm trong giỏ hàng.
+Hệ thống hiển thị màn hình Thanh toán/Xác nhận đơn hàng (bao gồm danh sách sản phẩm, giá tiền, địa chỉ mặc định, các phương thức vận chuyển và thanh toán).
+Khách hàng chọn/nhập địa chỉ nhận hàng và thông tin liên hệ.
+Khách hàng chọn đơn vị vận chuyển và phương thức thanh toán (COD, Chuyển khoản, Ví điện tử,...).
+Khách hàng áp dụng mã giảm giá / khuyến mãi (nếu có).
+Hệ thống tính toán lại tổng tiền (Tiền hàng + Phí vận chuyển - Khuyến mãi).
+Khách hàng nhấn nút "Đặt hàng".
+Hệ thống tạo đơn hàng mới, cập nhật tồn kho, xóa giỏ hàng và hiển thị màn hình "Đặt hàng thành công" kèm Mã đơn hàng (Order ID).
+
+5. Các luồng thay thế (Alternative Flows)
+A1: Thay đổi địa chỉ / thông tin giao hàng
+Tại bước 4, Khách hàng chọn "Thêm địa chỉ mới" hoặc sửa địa chỉ hiện tại.
+Hệ thống lưu thông tin mới và cập nhật lại tính phí vận chuyển tại bước 7.
+
+A2: Thanh toán trực tuyến (Ví điện tử / Thẻ / QR Code)
+Tại bước 5, Khách hàng chọn thanh toán trực tuyến.
+Sau bước 8, Hệ thống chuyển hướng Khách hàng sang Cổng thanh toán (Payment Gateway).
+Khách hàng thực hiện thanh toán thành công, Cổng thanh toán trả về phản hồi thành công cho Hệ thống.
+Hệ thống tiếp tục thực hiện bước 9 với trạng thái đơn hàng là Đã thanh toán.
+
+6. Các luồng ngoại lệ (Exception Flows)
+E1: Sản phẩm trong giỏ hàng hết hàng hoặc không đủ số lượng
+Tại bước 2, Hệ thống phát hiện có sản phẩm hết hàng hoặc vượt quá số lượng tồn kho.
+Hệ thống thông báo lỗi, đánh dấu sản phẩm không đủ hàng và yêu cầu Khách hàng cập nhật lại giỏ hàng trước khi tiếp tục.
+
+E2: Thanh toán trực tuyến thất bại
+Tại luồng A2, giao dịch thanh toán bị từ chối hoặc hết thời gian chờ (timeout).
+Cổng thanh toán trả về lỗi. Hệ thống lưu đơn hàng ở trạng thái Chờ thanh toán / Bị hủy do lỗi thanh toán và hiển thị thông báo lỗi cho Khách hàng kèm tùy chọn "Thử lại thanh toán".
+
+E3: Mã giảm giá không hợp lệ / Hết hạn
+Tại bước 6, Khách hàng nhập mã giảm giá không đủ điều kiện.
+Hệ thống báo lỗi "Mã không hợp lệ" và giữ nguyên tổng tiền ban đầu.
